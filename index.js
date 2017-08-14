@@ -9,8 +9,7 @@
  * Module dependencies.
  */
 const _ = require('lodash');
-const msgpack = require('msgpack');
-
+const msgpack = require('msgpack-lite');
 
 /**
  * Transform response data using msgpack.
@@ -29,7 +28,7 @@ function mgsPackResponse(options) {
     if (shouldMsgPack(req) && autoDetect) {
       res.json = function(jsObject) {
         var obj = jsObject;
-        var encodedResponse = msgpack.pack(obj);
+        var encodedResponse = msgpack.encode(obj);
         res.setHeader('Content-Type', 'application/x-msgpack');
         res.removeHeader('Content-Length');
         res.setHeader('Content-Length', _.size(encodedResponse));
@@ -39,7 +38,7 @@ function mgsPackResponse(options) {
 
     res.msgPack = function(jsObject) {
       var obj = jsObject;
-      var encodedResponse = msgpack.pack(obj);
+      var encodedResponse = msgpack.encode(obj);
       res.setHeader('Content-Type', 'application/x-msgpack');
       res.setHeader('Content-Length', _.size(encodedResponse));
       res.send(encodedResponse);      

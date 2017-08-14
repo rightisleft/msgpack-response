@@ -1,22 +1,22 @@
-const _ = require('lodash');
-const assert = require('assert');
-const express = require('express');
-const request = require('supertest');
-const msgpack = require('msgpack');
+let _ = require('lodash');
+let assert = require('assert');
+let express = require('express');
+let request = require('supertest');
+const msgpack = require('msgpack-lite');
 
-const msgPack = require('../index.js');
+
+let middleware = require('../index.js');
 
 let app = null;
 let sample_json = {"da test": "worked"};
-let sample_encoded = msgpack.pack(sample_json);
+let sample_encoded = msgpack.encode(sample_json);
 let sample_encoded_size = _.size(sample_encoded);
-
 
 describe('Base Functionality', function() {
   before(function() {
     app = express();
 
-    app.use(msgPack({auto_detect: true}));
+    app.use(middleware({auto_detect: true}));
     app.get('/test_json', function(req, res) {
 	    res.status(200).json(sample_json);
     });
